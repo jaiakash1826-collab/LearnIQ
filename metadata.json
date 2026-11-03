@@ -1,0 +1,8 @@
+{
+  "name": "LearnIQ",
+  "description": "AI-Powered Adaptive Physics Learning and Intelligent Virtual Laboratory for Class 10 Electricity",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,1034 @@
+# MASTER DEVELOPMENT PROMPT – LEARNIQ
+
+## Project title
+LearnIQ – AI-Powered Adaptive Physics Learning and Intelligent Virtual Laboratory
+
+## 1. Your role
+
+Act as a senior full-stack software architect, AI engineer, educational technology specialist, UI/UX designer and quality assurance engineer.
+
+Build a complete, functional, polished, responsive, full-stack web application named **LearnIQ**.
+
+This is a competitive hackathon project. The application must demonstrate genuine innovation, functional AI capabilities, accurate physics calculations, persistent student learning records and a complete end-to-end learning experience.
+
+Do not create merely a landing page, static dashboard, UI prototype or chatbot.
+
+Build a working application in which all major features are interconnected.
+
+Prioritize functional completeness, technical correctness, educational value, innovation and an impressive live demonstration.
+
+---
+
+# 2. Problem statement
+
+Traditional AI tutors can answer questions, explain concepts and generate quizzes. However, simply answering a student's question does not establish whether the student actually understands the underlying concept.
+
+Students may:
+- Memorize formulas without understanding them.
+- Arrive at the correct answer using incorrect reasoning.
+- Make the same conceptual mistakes repeatedly.
+- Fail to understand the prerequisites required for a topic.
+- Struggle to apply learned concepts to unfamiliar situations.
+- Forget previously learned concepts.
+
+Teachers may see marks and overall performance but lack sufficient information about why students misunderstand particular concepts.
+
+LearnIQ must address these problems.
+
+### Our solution
+
+LearnIQ is an intelligent adaptive Physics learning platform that investigates how students think, evaluates their conceptual understanding, identifies possible misconceptions, provides personalized learning recovery and verifies whether their understanding improves.
+
+Its signature innovation is an interactive learning cycle:
+
+**PREDICT → EXPERIMENT → OBSERVE → EXPLAIN → DIAGNOSE → RECOVER → VERIFY**
+
+The application should not simply tell students the correct answer. It should help them discover why their original understanding may have been incorrect.
+
+---
+
+# 3. Fixed project scope
+
+Do not expand the initial application into a multi-subject or multi-standard platform.
+
+- Standard: Class 10
+- Subject: Science – Physics
+- Initial chapter: Electricity
+- Primary users: Students and Teachers
+- Language: English
+- Application type: Responsive web application
+
+### Concepts to cover
+
+1. Electric charge
+2. Electric current
+3. Potential difference
+4. Resistance
+5. Ohm's law
+6. Series circuits
+7. Parallel circuits
+8. Electric power
+
+Include electrical energy and heating effect where relevant to the selected chapter content.
+
+Use standard Class 10-level educational explanations and scientifically correct physics.
+
+Keep syllabus content configurable. Do not falsely claim that the content exactly matches a particular education board unless its syllabus has been explicitly verified.
+
+---
+
+# 4. Technology architecture
+
+Use the following stack:
+
+Frontend:
+- React
+- TypeScript
+- Tailwind CSS
+- React Router
+- Recharts for analytics
+- React Flow or an equivalent graph visualization library for concept mapping
+
+Backend:
+- Node.js
+- Express
+- REST APIs
+
+Database:
+- MongoDB Atlas
+- Mongoose
+
+AI:
+- Google Gemini API
+- Server-side AI integration only
+- Structured JSON outputs for reasoning evaluation and misconception analysis
+
+Physics simulation:
+- Deterministic JavaScript calculation engine
+- Never depend on an LLM to calculate actual electrical values
+
+Security:
+- Store API keys in server-side environment secrets.
+- Never expose Gemini API keys in frontend code.
+- Validate user inputs and API requests.
+- Implement role-based access control.
+- Protect student and teacher data.
+
+Do not add unnecessary services or technologies.
+
+If MongoDB credentials are not yet available, create a clean database adapter and a clearly identified development mode. Do not silently replace the intended persistent database with temporary browser storage.
+
+---
+
+# 5. Application roles
+
+Implement two distinct user roles.
+
+## Student
+
+Students can:
+- Register and sign in.
+- Select the Electricity chapter.
+- Take a diagnostic assessment.
+- Explore the concept graph.
+- Use the virtual circuit laboratory.
+- Answer adaptive questions.
+- Explain their reasoning.
+- Report their confidence.
+- View misconceptions and learning recommendations.
+- Complete personalized recovery activities.
+- View revision schedules.
+- Track their learning progress.
+
+## Teacher
+
+Teachers can:
+- Sign in to a separate dashboard.
+- View registered students.
+- View individual student mastery.
+- Monitor class-wide concept gaps.
+- View common misconceptions.
+- Identify students requiring additional support.
+- Monitor improvement after recovery activities.
+- View learning evidence and reports.
+
+Students must not access teacher-only functions.
+
+For the hackathon demonstration, provide clearly labelled demo student and teacher accounts or a safe demo-mode entry. Do not pretend that a demo account is production authentication.
+
+---
+
+# 6. Core module 1 – Student dashboard
+
+Create an attractive student dashboard containing:
+
+- Welcome message.
+- Current chapter and learning progress.
+- Overall mastery estimate.
+- Concept-wise mastery cards.
+- Weak concepts requiring attention.
+- Upcoming revision activities.
+- Recent learning activity.
+- Recommended next activity.
+- Progress charts.
+- Quick access to the virtual laboratory.
+
+The dashboard must use actual stored student records and update after completed activities.
+
+Do not hardcode changing performance values.
+
+---
+
+# 7. Core module 2 – Diagnostic assessment
+
+Build an initial diagnostic assessment for the Electricity chapter.
+
+Requirements:
+
+- A question bank covering all eight concepts.
+- Approximately 10–15 diagnostic questions.
+- Multiple-choice and numerical questions.
+- Different difficulty levels.
+- One question displayed at a time.
+- Progress indicator.
+- Answer submission.
+- Optional reasoning explanation.
+- Confidence selection.
+- Final diagnostic report.
+
+After the assessment:
+
+1. Calculate concept-wise performance.
+2. Identify strong and weak concepts.
+3. Initialize the learner model.
+4. Display a concept mastery map.
+5. Recommend the next learning activity.
+
+Use a predefined, quality-checked question bank as the initial diagnostic source.
+
+Avoid generating every diagnostic question dynamically because reproducible assessment quality is important.
+
+---
+
+# 8. Core module 3 – Interactive concept graph
+
+Build a visual knowledge graph for the Electricity chapter.
+
+Requirements:
+
+- Each concept is a separate node.
+- Connect related concepts through meaningful prerequisite relationships.
+- Use different visual states for strong, developing and weak concepts.
+- Allow students to click a node.
+- Show concept explanations and prerequisite concepts.
+- Display the student's mastery estimate.
+- Show recommended learning activities.
+- Highlight prerequisite gaps when appropriate.
+
+The graph must be interactive, not just a static image.
+
+Avoid inventing incorrect prerequisite relationships. Make the graph configurable and validate its educational structure.
+
+---
+
+# 9. SIGNATURE INNOVATION – Virtual Physics Investigation Lab
+
+This is the most visually impressive and distinctive feature of LearnIQ.
+
+Create an interactive virtual circuit laboratory for the Electricity chapter.
+
+The experience must follow:
+
+**PREDICT → EXPERIMENT → OBSERVE → EXPLAIN → DIAGNOSE → RECOVER → VERIFY**
+
+## 9.1 Circuit laboratory interface
+
+Build a visual workspace containing:
+
+- Battery.
+- Connecting wires.
+- Resistors.
+- Bulbs.
+- Switches.
+- Ammeter.
+- Voltmeter.
+- Series circuit configuration.
+- Parallel circuit configuration.
+
+Provide controls to modify supported circuit parameters.
+
+The student must be able to:
+- Change battery voltage.
+- Change resistance.
+- Open and close supported switches.
+- Select series or parallel configurations.
+- Observe the resulting electrical values.
+- Reset the experiment.
+
+Implement a manageable set of predefined, valid circuit configurations rather than an unrestricted electrical engineering simulator.
+
+## 9.2 Prediction stage
+
+Before showing the calculated outcome, ask the student to predict what will happen.
+
+Example:
+
+"What happens to the current when resistance increases while voltage remains constant?"
+
+Ask the student to:
+- Select a prediction.
+- Explain the reasoning.
+- Select their confidence level.
+
+Store the prediction and explanation before revealing the result.
+
+Do not reveal the correct result prematurely.
+
+## 9.3 Experiment stage
+
+Allow the student to change supported circuit parameters.
+
+The student should interact with the circuit visually.
+
+## 9.4 Observation stage
+
+Calculate the electrical result using deterministic physics equations.
+
+Implement:
+
+Ohm's law:
+
+V = I × R
+
+Current:
+
+I = V / R
+
+Resistance:
+
+R = V / I
+
+Series resistance:
+
+R_total = R1 + R2 + ...
+
+Parallel resistance:
+
+1 / R_total = 1/R1 + 1/R2 + ...
+
+Electrical power:
+
+P = V × I
+
+Also support:
+
+P = I²R
+
+P = V²/R
+
+Use appropriate units and validate zero or invalid denominators.
+
+For the initial simulation, clearly state the assumptions:
+- Ideal battery.
+- Ideal connecting wires.
+- Supported resistive components.
+- Fixed resistor values unless changed by the student.
+- Bulb brightness is an illustrative approximation based on electrical power.
+
+Never display invented electrical results.
+
+Show the calculated current, voltage, equivalent resistance and power where applicable.
+
+## 9.5 Explanation stage
+
+After observing the outcome, ask:
+
+"Why was your prediction correct or different from the actual result?"
+
+Allow the student to provide a text explanation.
+
+## 9.6 Diagnosis stage
+
+Use Gemini to evaluate the explanation.
+
+Identify:
+- Correct reasoning.
+- Partially correct reasoning.
+- Incorrect conceptual assumptions.
+- Formula selection mistakes.
+- Calculation mistakes.
+- Possible misconceptions.
+- Insufficient evidence.
+
+Do not automatically label every wrong answer as a misconception.
+
+## 9.7 Learning outcome
+
+Display:
+- Original prediction.
+- Actual calculated result.
+- Explanation evaluation.
+- Identified reasoning gap.
+- Correct scientific explanation.
+- Suggested next learning activity.
+
+Save the experiment and its results in the student's learning history.
+
+---
+
+# 10. ThinkTrace – Reasoning evaluator
+
+Build an AI-powered reasoning evaluation system.
+
+For every appropriate question, collect:
+- Question.
+- Correct answer.
+- Student answer.
+- Student explanation.
+- Expected reasoning.
+- Relevant concept.
+- Prerequisite concepts.
+
+Evaluate the student's thinking, not just the final answer.
+
+Identify:
+1. Whether the answer is correct.
+2. Whether the formula or principle selected is appropriate.
+3. Whether the reasoning is scientifically valid.
+4. Whether the calculations are correct.
+5. Where the reasoning first becomes incorrect.
+6. Whether the student has demonstrated understanding.
+
+Return structured JSON containing:
+
+- answer_correct
+- reasoning_quality
+- reasoning_category
+- identified_error
+- possible_misconception
+- confidence_of_diagnosis
+- explanation
+- recommended_next_action
+- insufficient_evidence
+
+Use a consistent response schema and validate AI outputs on the server.
+
+Do not present AI interpretations as certain psychological or cognitive diagnoses.
+
+---
+
+# 11. Misconception Memory and Verification Loop
+
+Build a persistent misconception tracking system.
+
+Whenever a possible misconception is identified:
+
+1. Record the concept.
+2. Record the student's original response.
+3. Record the reasoning evidence.
+4. Record the possible misconception.
+5. Track repeated occurrences.
+6. Recommend a diagnostic follow-up question.
+7. Check whether the student demonstrates the same misunderstanding.
+8. Provide corrective learning activities.
+9. Generate a different verification question.
+10. Update the misconception status based on new evidence.
+
+Possible statuses:
+- Suspected
+- Under verification
+- Confirmed by repeated evidence
+- Improving
+- Resolved after verification
+
+Do not mark a misconception resolved merely because the student reads an explanation or answers one familiar question correctly.
+
+Maintain a chronological misconception history.
+
+---
+
+# 12. Prerequisite Gap Detector
+
+Build a system that investigates foundational concepts when a student struggles with a more advanced concept.
+
+Example:
+
+If the student struggles with Ohm's law, investigate:
+- Understanding of voltage.
+- Understanding of current.
+- Understanding of resistance.
+- Basic mathematical rearrangement.
+
+Use the concept graph to identify possible prerequisite gaps.
+
+Recommend the earliest relevant concept requiring attention.
+
+Do not automatically assume that every advanced error comes from a prerequisite gap. Ask targeted questions when evidence is insufficient.
+
+Show the student why the prerequisite is relevant.
+
+---
+
+# 13. Adaptive Question Generation
+
+Build an adaptive question engine.
+
+Questions should be generated or selected according to:
+
+- Current concept mastery.
+- Previous answers.
+- Reasoning quality.
+- Repeated misconceptions.
+- Prerequisite mastery.
+- Previous question difficulty.
+- Revision history.
+
+Support:
+- Easy questions.
+- Medium questions.
+- Advanced questions.
+- Numerical problems.
+- Conceptual questions.
+- Real-world application questions.
+- Circuit interpretation questions.
+- Misconception-specific challenges.
+
+Generate questions with:
+- Question text.
+- Concept ID.
+- Difficulty.
+- Correct answer.
+- Expected reasoning.
+- Explanation.
+- Misconception patterns being tested.
+
+Avoid repeating identical questions unnecessarily.
+
+Validate generated questions before displaying them.
+
+Do not let AI invent incorrect physics equations or answers. Use deterministic calculations or a verified answer key for numerical questions.
+
+---
+
+# 14. Learning Recovery Mode
+
+Build a personalized recovery journey whenever the learner demonstrates a meaningful conceptual gap.
+
+A recovery journey should contain:
+
+Step 1: Identify the learning gap.
+
+Step 2: Explain the concept in simple language.
+
+Step 3: Provide a relevant visual example or circuit illustration.
+
+Step 4: Provide a guided practice question.
+
+Step 5: Provide an independent application question.
+
+Step 6: Verify understanding with a different question.
+
+Step 7: Update mastery and misconception history.
+
+Recovery must be targeted to the actual gap.
+
+Do not simply show generic explanations or repeat the same question.
+
+---
+
+# 15. Understanding Verification
+
+After a corrective learning activity, test whether the student can independently apply the concept.
+
+Use:
+- A different question.
+- A different numerical value.
+- A different circuit arrangement.
+- An application-based situation.
+- A reasoning explanation.
+
+Compare the student's new response with their earlier evidence.
+
+Update mastery only according to the evidence collected.
+
+Show the student:
+- What they initially struggled with.
+- What they learned.
+- What improved.
+- What still needs practice.
+
+---
+
+# 16. Confidence vs Knowledge
+
+After selected questions, ask:
+
+"How confident are you about your answer?"
+
+Options:
+- Very confident.
+- Somewhat confident.
+- Not confident.
+
+Compare confidence with actual answer correctness and reasoning quality.
+
+Identify patterns such as:
+- Correct and confident.
+- Correct but uncertain.
+- Incorrect but confident.
+- Incorrect and uncertain.
+
+Use these patterns to prioritize follow-up questions.
+
+Do not treat confidence as proof of mastery.
+
+This feature is supplementary and must not interrupt the main learning workflow.
+
+---
+
+# 17. Learner model and mastery tracking
+
+Maintain a persistent learner model for every student and every concept.
+
+Track:
+- Mastery estimate.
+- Correct answer count.
+- Incorrect answer count.
+- Reasoning quality.
+- Number of attempts.
+- Misconception history.
+- Last practice date.
+- Revision due date.
+- Confidence history.
+- Verification results.
+
+Use a transparent, configurable mastery update algorithm.
+
+Example initial prototype formula:
+
+New mastery = 0.7 × Previous mastery + 0.3 × Evidence score
+
+Use an evidence score informed by:
+- Answer correctness.
+- Reasoning quality.
+- Difficulty.
+- Consistency.
+- Independent verification.
+
+These weights are starting heuristics, not scientifically validated learning probabilities.
+
+Avoid updating mastery from a single weak signal.
+
+Show how mastery changes over time.
+
+---
+
+# 18. Spaced repetition
+
+Build a personalized revision planner.
+
+Use an initial configurable scheduling policy:
+
+- Mastery below 40%: review after 1 day.
+- 40–59%: review after 2 days.
+- 60–79%: review after 4 days.
+- 80–89%: review after 7 days.
+- 90% and above: review after 14 days.
+
+Prioritize concepts with repeated misconceptions or failed verification.
+
+Show:
+- Due today.
+- Upcoming revisions.
+- Overdue revisions.
+- Completed revisions.
+
+Store revision records persistently.
+
+These are prototype scheduling rules and should remain configurable.
+
+---
+
+# 19. Teacher Intervention Intelligence
+
+Build a teacher dashboard that provides actionable educational insights rather than only marks and charts.
+
+Include:
+
+- Total registered students.
+- Class average mastery.
+- Concept-wise mastery distribution.
+- Weakest concepts.
+- Common misconception patterns.
+- Students needing additional support.
+- Improvement after recovery activities.
+- Diagnostic versus current mastery.
+- Revision completion statistics.
+- Question accuracy.
+
+## Classroom Misconception Heatmap
+
+Display a heatmap showing which concepts have the highest number of students with identified learning gaps.
+
+Example concepts:
+- Electric current.
+- Potential difference.
+- Resistance.
+- Ohm's law.
+- Series circuits.
+- Parallel circuits.
+- Electric power.
+
+When a teacher clicks a concept, display:
+- Number of affected students.
+- Common reasoning errors.
+- Supporting examples from anonymized student responses.
+- Suggested classroom revision activity.
+- Changes in performance over time.
+
+## Teacher intervention recommendations
+
+Example:
+
+"Many students are struggling with the relationship between resistance and current. Consider revisiting Ohm's law using a simple circuit experiment."
+
+Recommendations must be based on stored student data.
+
+Clearly distinguish real student analytics from demonstration data.
+
+---
+
+# 20. Application screens and navigation
+
+Build the following screens.
+
+Public:
+1. Landing page.
+2. Login.
+3. Registration.
+
+Student:
+4. Student dashboard.
+5. Syllabus/chapter page.
+6. Diagnostic assessment.
+7. Diagnostic results.
+8. Concept graph.
+9. Concept explanation.
+10. Virtual circuit laboratory.
+11. Adaptive practice.
+12. ThinkTrace evaluation.
+13. Misconception history.
+14. Learning recovery.
+15. Revision planner.
+16. Learning progress report.
+
+Teacher:
+17. Teacher dashboard.
+18. Student list.
+19. Individual student profile.
+20. Concept performance.
+21. Misconception heatmap.
+22. Teacher intervention recommendations.
+23. Class reports.
+
+Use consistent navigation and a clear separation between student and teacher interfaces.
+
+---
+
+# 21. Database architecture
+
+Create appropriate MongoDB collections and Mongoose schemas.
+
+Suggested collections:
+
+1. users
+2. concepts
+3. questions
+4. diagnosticAttempts
+5. attempts
+6. learnerModels
+7. misconceptions
+8. circuitExperiments
+9. recoveryActivities
+10. revisionSchedules
+11. classes
+
+Every student record must be associated with the correct user.
+
+Maintain timestamps and relationships between records.
+
+Avoid duplicating conflicting mastery values in different collections.
+
+Store the source of each mastery update and retain enough evidence to explain why a score changed.
+
+Add indexes for frequently queried student and concept records.
+
+---
+
+# 22. Backend API architecture
+
+Implement REST endpoints with proper validation and error handling.
+
+Suggested endpoints:
+
+Authentication:
+- POST /api/auth/register
+- POST /api/auth/login
+- GET /api/auth/me
+
+Concepts:
+- GET /api/concepts
+- GET /api/concepts/:id
+- GET /api/concepts/graph
+
+Diagnostic:
+- GET /api/diagnostic
+- POST /api/diagnostic/submit
+
+Questions:
+- GET /api/questions/next
+- POST /api/questions/generate
+- POST /api/attempts
+
+AI evaluation:
+- POST /api/ai/evaluate-reasoning
+- POST /api/ai/detect-misconception
+- POST /api/ai/generate-recovery
+
+Learner model:
+- GET /api/learners/:id/mastery
+- GET /api/learners/:id/history
+- GET /api/learners/:id/next-activity
+
+Circuit laboratory:
+- POST /api/circuits/calculate
+- POST /api/circuits/experiments
+
+Revision:
+- GET /api/revisions
+- POST /api/revisions/complete
+
+Teacher:
+- GET /api/teachers/dashboard
+- GET /api/teachers/students
+- GET /api/teachers/analytics
+- GET /api/teachers/misconceptions
+- GET /api/teachers/interventions
+
+You may adjust endpoint naming if needed, but maintain consistent API contracts between frontend and backend.
+
+---
+
+# 23. UI/UX design requirements
+
+Create a polished, professional educational technology product.
+
+Visual identity:
+- Product name: LearnIQ.
+- Modern, clean, intelligent and academic.
+- Deep navy and blue as primary colors.
+- Teal or cyan for positive learning progress.
+- Warm neutral backgrounds.
+- Clear typography.
+- Subtle shadows and rounded cards.
+- Consistent spacing.
+- High-quality icons.
+- Smooth but restrained animations.
+
+The virtual circuit laboratory should be the visual centerpiece.
+
+Avoid:
+- Generic chatbot-only layouts.
+- Excessive gradients.
+- Overcrowded dashboards.
+- Excessive decorative animations.
+- Fake buttons.
+- Placeholder text.
+- Empty pages.
+- Nonfunctional charts.
+- Unnecessary features that distract from the learning experience.
+
+Make the application responsive on laptops, tablets and mobile devices.
+
+Provide clear loading, success, empty and error states.
+
+Ensure good accessibility and readable contrast.
+
+---
+
+# 24. Functional integrity requirements
+
+These requirements are mandatory.
+
+1. Every visible primary button must work.
+2. Every navigation item must lead to the correct screen.
+3. Every form must validate input.
+4. Data must persist in MongoDB.
+5. Student progress must update after attempts.
+6. Teacher analytics must reflect actual stored records.
+7. Circuit calculations must use correct physics.
+8. AI reasoning evaluation must return structured and validated output.
+9. AI-generated questions must be validated before use.
+10. Student and teacher permissions must be enforced.
+11. API errors must be handled gracefully.
+12. No API keys may be exposed in frontend code.
+13. Do not use fabricated data as actual student performance.
+14. Clearly identify demo data.
+15. Do not claim that an AI feature works if it is only a static UI demonstration.
+16. Do not silently replace failed AI calls with fake successful results.
+17. Provide a clear fallback message when the AI service is unavailable.
+18. Keep the application usable if a nonessential AI feature temporarily fails.
+
+---
+
+# 25. Testing and acceptance criteria
+
+Before declaring the application complete, verify the following end-to-end workflow.
+
+### Student journey
+
+1. A student signs in.
+2. Opens Class 10 Physics – Electricity.
+3. Takes the diagnostic test.
+4. Receives concept-wise mastery results.
+5. Opens the concept graph.
+6. Enters the virtual circuit laboratory.
+7. Makes a prediction.
+8. Changes circuit parameters.
+9. Observes correctly calculated electrical values.
+10. Explains the result.
+11. Receives reasoning evaluation.
+12. Has a possible misconception recorded.
+13. Receives a targeted recovery activity.
+14. Answers a different verification question.
+15. Has the learner model updated.
+16. Receives a revision schedule.
+17. Sees updated learning progress.
+
+### Teacher journey
+
+1. A teacher signs in.
+2. Opens the class dashboard.
+3. Views student performance.
+4. Identifies the weakest concept.
+5. Opens the misconception heatmap.
+6. Views common reasoning errors.
+7. Receives an actionable teaching recommendation.
+8. Checks improvement after recovery activities.
+
+### Physics validation
+
+Test at least these cases:
+
+Case 1:
+V = 12 V, R = 4 Ω
+Expected current = 3 A.
+
+Case 2:
+Two resistors of 2 Ω and 4 Ω in series.
+Expected equivalent resistance = 6 Ω.
+
+Case 3:
+Two resistors of 6 Ω and 6 Ω in parallel.
+Expected equivalent resistance = 3 Ω.
+
+Case 4:
+V = 12 V, I = 2 A.
+Expected power = 24 W.
+
+Do not declare completion until the calculations and workflows pass.
+
+---
+
+# 26. Hackathon presentation requirements
+
+The application must support a compelling demonstration.
+
+Prepare a realistic demonstration scenario in which:
+
+- A student has a conceptual misunderstanding.
+- The student predicts an incorrect circuit outcome.
+- The virtual laboratory reveals the actual calculated result.
+- ThinkTrace identifies the reasoning gap.
+- Misconception Memory records the evidence.
+- LearnIQ recommends a targeted recovery activity.
+- The student completes a new challenge.
+- The learner model reflects the new evidence.
+- The teacher dashboard shows the student's progress and the class-wide learning gap.
+
+The demonstration must use actual working functionality, not a prewritten sequence pretending to be interactive.
+
+---
+
+# 27. Development execution instructions
+
+Build the application systematically.
+
+First:
+- Establish the complete project structure.
+- Set up React and the Node.js backend.
+- Establish database connectivity.
+- Create the shared data models.
+- Implement authentication and roles.
+- Create the main navigation and dashboard structure.
+
+Second:
+- Implement the concept graph.
+- Implement the diagnostic assessment.
+- Implement the circuit calculation engine.
+- Build the virtual circuit laboratory.
+
+Third:
+- Integrate Gemini reasoning evaluation.
+- Implement misconception tracking.
+- Implement prerequisite gap detection.
+- Implement adaptive question generation.
+- Implement learning recovery and verification.
+
+Fourth:
+- Implement learner mastery updates.
+- Implement spaced repetition.
+- Implement teacher analytics and intervention recommendations.
+
+Fifth:
+- Integrate all modules.
+- Test the complete student and teacher journeys.
+- Fix errors.
+- Validate calculations.
+- Test database persistence.
+- Verify API security.
+- Improve responsive design.
+
+Do not attempt to create all features as disconnected mockups.
+
+Do not remove existing working features when adding new functionality.
+
+Do not overwrite working code without checking dependencies.
+
+Do not stop after creating the landing page.
+
+If the full implementation cannot fit into one generation, establish the project architecture first and continue implementing the remaining modules in logical stages while preserving the agreed requirements.
+
+At the end, provide:
+- Project folder structure.
+- Database setup instructions.
+- Required environment variables.
+- Implemented API endpoints.
+- Completed feature checklist.
+- Known limitations.
+- Testing results.
+- Instructions for running the application.
+
+---
+
+# FINAL PRODUCT PRINCIPLE
+
+LearnIQ must not be another AI chatbot that gives students answers.
+
+It must be an intelligent learning system that investigates student reasoning, uses interactive experiments to challenge understanding, identifies possible misconceptions, provides targeted recovery and verifies actual learning improvement.
+
+Its defining experience is:
+
+**Predict. Experiment. Explain. Discover. Improve. Verify.**
+
+Build LearnIQ as a complete, professional, technically sound and genuinely interactive hackathon application.

@@ -1,0 +1,592 @@
+{
+  "users": [],
+  "concepts": [
+    {
+      "id": "c1",
+      "code": "ELEC-01",
+      "name": "Electric Charge",
+      "shortDescription": "Fundamental physical property of matter carried by electrons and protons.",
+      "fullDescription": "Matter consists of atoms with positive protons and negative electrons. The SI unit of electric charge is the Coulomb (C). 1 Coulomb equals the charge of approximately 6.25 × 10¹⁸ electrons. Like charges repel, opposite charges attract.",
+      "order": 1,
+      "prerequisites": [],
+      "standardFormulas": [
+        "Q = n × e",
+        "Q = I × t"
+      ],
+      "unit": "Coulomb (C)",
+      "commonMisconceptions": [
+        {
+          "id": "misc-charge-created",
+          "title": "Charge is Created by Batteries",
+          "description": "Believing batteries produce or create electric charges rather than driving pre-existing charges inside conducting wires.",
+          "correctScientificPrinciple": "Charge is conserved. Batteries provide the potential difference (work per unit charge) that moves charges already present in the metal conductor."
+        }
+      ],
+      "realWorldApplication": "Static cling, electrostatic precipitators in factory chimneys, laser printers."
+    },
+    {
+      "id": "c2",
+      "code": "ELEC-02",
+      "name": "Electric Current",
+      "shortDescription": "Rate of flow of electric charges through a conductor per unit time.",
+      "fullDescription": "Electric current (I) is the quantity of electric charge passing through any cross-section of a conductor per second. Formally, I = Q / t. The SI unit is Ampere (A), where 1 A = 1 C/s. Conventionally directed from positive to negative terminal, though electrons flow in the opposite direction. An ammeter is connected in series.",
+      "order": 2,
+      "prerequisites": [
+        "c1"
+      ],
+      "standardFormulas": [
+        "I = Q / t"
+      ],
+      "unit": "Ampere (A)",
+      "commonMisconceptions": [
+        {
+          "id": "misc-current-consumed",
+          "title": "Current is Consumed or Used Up",
+          "description": "Believing current leaving a bulb or resistor is less than the current entering it because electricity is \"consumed\".",
+          "correctScientificPrinciple": "Current is the rate of charge flow and is conserved in a closed loop. The current entering a bulb is exactly equal to the current exiting it; electrical energy is converted to light/heat, but charge is never destroyed."
+        },
+        {
+          "id": "misc-electron-speed",
+          "title": "Electrons Travel at the Speed of Light",
+          "description": "Believing electrons physically race at light speed through wires from the battery to the switch.",
+          "correctScientificPrinciple": "The electric field propagates near light speed, setting all mobile electrons in motion almost instantaneously, but the electron drift velocity is typically only a few millimeters per second."
+        }
+      ],
+      "realWorldApplication": "Household circuit breakers, charging smartphones, ammeters in testing equipment."
+    },
+    {
+      "id": "c3",
+      "code": "ELEC-03",
+      "name": "Potential Difference",
+      "shortDescription": "Work done to move a unit positive charge from one point to another.",
+      "fullDescription": "Electric potential difference (V) between two points is defined as the work done (W) in moving a unit positive charge (Q) from one point to the other. V = W / Q. The SI unit is Volt (V), where 1 V = 1 Joule / Coulomb. A voltmeter has very high resistance and is always connected in parallel across the two points.",
+      "order": 3,
+      "prerequisites": [
+        "c1"
+      ],
+      "standardFormulas": [
+        "V = W / Q"
+      ],
+      "unit": "Volt (V)",
+      "commonMisconceptions": [
+        {
+          "id": "misc-voltage-flows",
+          "title": "Voltage Flows Through Wires",
+          "description": "Saying \"voltage flows\" through the circuit like a liquid, confusing voltage with current.",
+          "correctScientificPrinciple": "Current flows through a circuit; voltage (potential difference) exists ACROSS two points or components, serving as the electrical pressure or driving push."
+        }
+      ],
+      "realWorldApplication": "Battery ratings (1.5V AA cells, 12V car batteries, 220V household wall outlets)."
+    },
+    {
+      "id": "c4",
+      "code": "ELEC-04",
+      "name": "Resistance & Factors Affecting It",
+      "shortDescription": "The opposition offered by a conductor to the flow of electric charges.",
+      "fullDescription": "Resistance (R) measures how strongly a component opposes current flow. It arises from collisions between moving electrons and vibrating metal lattice ions. R = ρ × (L / A), where ρ is electrical resistivity, L is length of conductor, and A is cross-sectional area. Resistance is directly proportional to length, inversely proportional to thickness, and increases with temperature for metals.",
+      "order": 4,
+      "prerequisites": [
+        "c2",
+        "c3"
+      ],
+      "standardFormulas": [
+        "R = ρ × (L / A)",
+        "R = V / I"
+      ],
+      "unit": "Ohm (Ω)",
+      "commonMisconceptions": [
+        {
+          "id": "misc-resistance-independent",
+          "title": "Thicker Wires Have Higher Resistance",
+          "description": "Assuming a bigger or thicker wire has more \"matter\" to block electrons, so resistance increases.",
+          "correctScientificPrinciple": "Thicker wires have a larger cross-sectional area (A), offering more parallel paths for electron flow. Resistance is inversely proportional to area (R ∝ 1/A), so thicker wires have lower resistance."
+        }
+      ],
+      "realWorldApplication": "Heating elements made of high-resistivity Nichrome wire, thick cables for heavy machinery."
+    },
+    {
+      "id": "c5",
+      "code": "ELEC-05",
+      "name": "Ohm's Law",
+      "shortDescription": "Direct proportionality between potential difference and current at constant temperature.",
+      "fullDescription": "Ohm's law states that the electric current (I) flowing through a metallic conductor is directly proportional to the potential difference (V) across its ends, provided temperature and other physical conditions remain constant. V ∝ I, which yields V = I × R. The I-V graph for an ohmic conductor is a straight line passing through the origin.",
+      "order": 5,
+      "prerequisites": [
+        "c2",
+        "c3",
+        "c4"
+      ],
+      "standardFormulas": [
+        "V = I × R",
+        "I = V / R",
+        "R = V / I"
+      ],
+      "unit": "Relationship (V = I·R)",
+      "commonMisconceptions": [
+        {
+          "id": "misc-ohms-law-invariable",
+          "title": "Ohm’s Law Applies to All Devices Universally",
+          "description": "Assuming every electronic component maintains constant resistance under any condition.",
+          "correctScientificPrinciple": "Ohm's law applies to ohmic conductors at constant temperature. Non-ohmic devices (like diode semiconductors or filament lamps whose temperature changes drastically) have non-linear I-V curves."
+        },
+        {
+          "id": "misc-resistance-changes-with-v",
+          "title": "Increasing Voltage Directly Increases Resistor Resistance",
+          "description": "Believing that because R = V/I, increasing V automatically increases R.",
+          "correctScientificPrinciple": "For a fixed ohmic resistor, R is an inherent physical property determined by geometry and material. Increasing V causes I to increase proportionally, keeping the ratio V/I constant."
+        }
+      ],
+      "realWorldApplication": "Dimmer switches, volume sliders, electronic circuit design."
+    },
+    {
+      "id": "c6",
+      "code": "ELEC-06",
+      "name": "Series Circuits",
+      "shortDescription": "Single path for current; same current through all components, voltages divide.",
+      "fullDescription": "In a series circuit, components are connected end-to-end along a single path. Key characteristics: (1) Current I is identical through every component; (2) Total potential difference is the sum of individual voltage drops (V_total = V1 + V2 + ...); (3) Equivalent resistance is the sum of individual resistances (Req = R1 + R2 + ...); (4) If any single component is disconnected or burns out, the entire circuit is broken.",
+      "order": 6,
+      "prerequisites": [
+        "c5"
+      ],
+      "standardFormulas": [
+        "R_total = R1 + R2 + ...",
+        "V_total = V1 + V2 + ...",
+        "I = constant"
+      ],
+      "unit": "Series configuration",
+      "commonMisconceptions": [
+        {
+          "id": "misc-series-current-attenuation",
+          "title": "The First Bulb in Series is Always Brighter Than the Second",
+          "description": "Believing that the bulb closest to the positive terminal receives more current than subsequent bulbs in series.",
+          "correctScientificPrinciple": "In a series circuit, there is only one continuous loop. Charge cannot pile up or vanish. Current is strictly identical through every component in the series string (I1 = I2 = I_total)."
+        },
+        {
+          "id": "misc-series-independent-failure",
+          "title": "Removing One Component in Series Leaves Others Working",
+          "description": "Thinking other bulbs stay on when one bulb is unscrewed in a series string.",
+          "correctScientificPrinciple": "Breaking any point in a series circuit creates an open loop, dropping the current to zero throughout the whole circuit."
+        }
+      ],
+      "realWorldApplication": "Decorative fairy lights (traditional), security interlock switches, fuse connected in series."
+    },
+    {
+      "id": "c7",
+      "code": "ELEC-07",
+      "name": "Parallel Circuits",
+      "shortDescription": "Multiple branches; full voltage across each branch, currents divide.",
+      "fullDescription": "In a parallel circuit, components are connected across the same two common nodes. Key characteristics: (1) The potential difference (V) across each parallel branch is identical and equals the source voltage; (2) Total current is the sum of branch currents (I_total = I1 + I2 + ...); (3) Reciprocal of equivalent resistance equals the sum of reciprocals: 1/Req = 1/R1 + 1/R2 + ...; (4) Req is always smaller than the smallest individual branch resistance; (5) Each branch operates independently.",
+      "order": 7,
+      "prerequisites": [
+        "c5",
+        "c6"
+      ],
+      "standardFormulas": [
+        "1/R_total = 1/R1 + 1/R2 + ...",
+        "I_total = I1 + I2 + ...",
+        "V = constant across branches"
+      ],
+      "unit": "Parallel configuration",
+      "commonMisconceptions": [
+        {
+          "id": "misc-parallel-resistance-increase",
+          "title": "Adding More Resistors in Parallel Increases Total Resistance",
+          "description": "Thinking that adding more resistive parts to a circuit must always increase overall resistance.",
+          "correctScientificPrinciple": "Adding parallel branches provides additional pathways for charges to flow. Total conductance increases, so overall equivalent resistance actually DECREASES. For identical resistors R in parallel, Req = R / n."
+        },
+        {
+          "id": "misc-parallel-voltage-division",
+          "title": "Voltage Splits Among Parallel Branches",
+          "description": "Believing a 12V battery only gives 6V to each of two parallel branches.",
+          "correctScientificPrinciple": "Each parallel branch is connected directly across the same two terminals of the battery, receiving the full 12V potential difference."
+        }
+      ],
+      "realWorldApplication": "Domestic home wiring (appliances can be switched on/off independently and each gets 220V)."
+    },
+    {
+      "id": "c8",
+      "code": "ELEC-08",
+      "name": "Electric Power & Joule's Heating",
+      "shortDescription": "Rate of electrical energy consumption and heating effect produced by current.",
+      "fullDescription": "Electric power (P) is the rate at which electrical energy is consumed or dissipated. P = V × I. By applying Ohm's law, P = I² × R = V² / R. The SI unit is the Watt (W), where 1 W = 1 J/s. Joule's law of heating states that heat produced in a resistor is H = I² × R × t. Commercial unit of electric energy is the kilowatt-hour (kWh), where 1 kWh = 3.6 × 10⁶ Joules.",
+      "order": 8,
+      "prerequisites": [
+        "c5",
+        "c6",
+        "c7"
+      ],
+      "standardFormulas": [
+        "P = V × I",
+        "P = I² × R",
+        "P = V² / R",
+        "H = I² × R × t",
+        "1 kWh = 3.6 × 10⁶ J"
+      ],
+      "unit": "Watt (W), Joule (J)",
+      "commonMisconceptions": [
+        {
+          "id": "misc-power-resistance-dilemma",
+          "title": "Higher Resistance Always Gives Greater Power Dissipation",
+          "description": "Using P = I²R to conclude that high resistance always draws more power, ignoring how current changes with voltage.",
+          "correctScientificPrinciple": "If voltage is constant (e.g., household mains), P = V² / R. Therefore, a lower resistance component actually draws higher current and consumes MORE power. P = I²R only predicts higher power when current is held constant (as in series)."
+        }
+      ],
+      "realWorldApplication": "Electric irons, water geysers, electric kettles, incandescent bulbs vs energy-efficient LEDs."
+    }
+  ],
+  "questions": [
+    {
+      "id": "diag-01",
+      "conceptId": "c1",
+      "conceptName": "Electric Charge",
+      "title": "Charge in a Conductor",
+      "questionText": "A current of 0.5 A is drawn by a filament of an electric bulb for 10 minutes. What is the total amount of electric charge that flows through the circuit?",
+      "type": "numerical",
+      "difficulty": "easy",
+      "correctAnswer": "300",
+      "tolerance": 1,
+      "unit": "Coulombs (C)",
+      "expectedReasoning": "Use Q = I × t. Convert time into seconds: t = 10 minutes × 60 s/min = 600 s. Then Q = 0.5 A × 600 s = 300 C.",
+      "hint": "Remember to convert minutes to seconds before multiplying by current."
+    },
+    {
+      "id": "diag-02",
+      "conceptId": "c2",
+      "conceptName": "Electric Current",
+      "title": "Current Conservation in a Lamp",
+      "questionText": "An ammeter placed before a glowing electric lamp reads 2.0 A. What will an ammeter placed immediately after the lamp read?",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "options": [
+        {
+          "id": "a",
+          "text": "Less than 2.0 A, because current is consumed to produce light"
+        },
+        {
+          "id": "b",
+          "text": "Exactly 2.0 A, because charge is conserved in the circuit"
+        },
+        {
+          "id": "c",
+          "text": "More than 2.0 A, due to accumulated electron pressure"
+        },
+        {
+          "id": "d",
+          "text": "0 A, because the energy was completely spent in the filament"
+        }
+      ],
+      "correctAnswer": "b",
+      "expectedReasoning": "Electric current is the rate of flow of charge. Charges do not vanish or get consumed when passing through a resistor; electric potential energy is converted to light and heat, but charge is strictly conserved. Hence current in equals current out.",
+      "misconceptionTested": "misc-current-consumed"
+    },
+    {
+      "id": "diag-03",
+      "conceptId": "c3",
+      "conceptName": "Potential Difference",
+      "title": "Work Done Moving Charge",
+      "questionText": "How much work is done in moving a charge of 2 Coulombs across two points having a potential difference of 12 V?",
+      "type": "numerical",
+      "difficulty": "easy",
+      "correctAnswer": "24",
+      "tolerance": 0.1,
+      "unit": "Joules (J)",
+      "expectedReasoning": "Potential difference V = W / Q => W = V × Q. W = 12 V × 2 C = 24 Joules.",
+      "hint": "Recall the definition: V = W / Q."
+    },
+    {
+      "id": "diag-04",
+      "conceptId": "c4",
+      "conceptName": "Resistance & Factors Affecting It",
+      "title": "Effect of Doubling Conductor Thickness",
+      "questionText": "A metal wire of length L and resistance R is replaced by another wire of the same material and same length, but with twice the cross-sectional area (2A). What is the resistance of the new wire?",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "a",
+          "text": "4R"
+        },
+        {
+          "id": "b",
+          "text": "2R"
+        },
+        {
+          "id": "c",
+          "text": "R / 2"
+        },
+        {
+          "id": "d",
+          "text": "R / 4"
+        }
+      ],
+      "correctAnswer": "c",
+      "expectedReasoning": "Resistance R = ρ × (L / A). Since resistance is inversely proportional to area (R ∝ 1/A), doubling the area halves the resistance: R_new = R / 2.",
+      "misconceptionTested": "misc-resistance-independent"
+    },
+    {
+      "id": "diag-05",
+      "conceptId": "c5",
+      "conceptName": "Ohm's Law",
+      "title": "Current Calculation with Ohm's Law",
+      "questionText": "A potential difference of 12 V is applied across a fixed 4 Ω resistor. What is the electric current flowing through it?",
+      "type": "numerical",
+      "difficulty": "easy",
+      "correctAnswer": "3",
+      "tolerance": 0.05,
+      "unit": "Amperes (A)",
+      "expectedReasoning": "By Ohm's law, V = I × R => I = V / R = 12 V / 4 Ω = 3 A.",
+      "hint": "Use the formula I = V / R."
+    },
+    {
+      "id": "diag-06",
+      "conceptId": "c5",
+      "conceptName": "Ohm's Law",
+      "title": "Increasing Voltage on a Resistor",
+      "questionText": "If the potential difference across a constant ohmic resistor is tripled, what happens to the resistance of the resistor?",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "a",
+          "text": "It triples, because R = V / I"
+        },
+        {
+          "id": "b",
+          "text": "It decreases to one-third"
+        },
+        {
+          "id": "c",
+          "text": "It remains unchanged, because resistance is an inherent physical property"
+        },
+        {
+          "id": "d",
+          "text": "It drops to zero"
+        }
+      ],
+      "correctAnswer": "c",
+      "expectedReasoning": "For an ohmic conductor at constant temperature, resistance R is an inherent physical property determined by material, length, and cross-section. When voltage triples, current also triples, keeping the ratio V/I constant.",
+      "misconceptionTested": "misc-resistance-changes-with-v"
+    },
+    {
+      "id": "diag-07",
+      "conceptId": "c6",
+      "conceptName": "Series Circuits",
+      "title": "Equivalent Resistance of Series Resistors",
+      "questionText": "Two resistors of 2 Ω and 4 Ω are connected in series to a battery. What is the equivalent resistance of the combination?",
+      "type": "numerical",
+      "difficulty": "easy",
+      "correctAnswer": "6",
+      "tolerance": 0.05,
+      "unit": "Ohms (Ω)",
+      "expectedReasoning": "In a series circuit, resistances add linearly: R_total = R1 + R2 = 2 Ω + 4 Ω = 6 Ω.",
+      "hint": "In series, resistances add directly."
+    },
+    {
+      "id": "diag-08",
+      "conceptId": "c6",
+      "conceptName": "Series Circuits",
+      "title": "Brightness in Series String",
+      "questionText": "Two identical 60 W bulbs, Bulb A and Bulb B, are connected in series across a 12 V battery, with Bulb A connected closer to the positive battery terminal. Which bulb shines brighter?",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bulb A, because it receives the electric current first"
+        },
+        {
+          "id": "b",
+          "text": "Bulb B, because negative charges flow towards it first"
+        },
+        {
+          "id": "c",
+          "text": "Both shine with equal brightness, because current is identical everywhere in series"
+        },
+        {
+          "id": "d",
+          "text": "Neither bulb will glow at all"
+        }
+      ],
+      "correctAnswer": "c",
+      "expectedReasoning": "In a series circuit, there is only one pathway for current. The current flowing through Bulb A is identical to that flowing through Bulb B (I1 = I2). Since the bulbs have identical resistance, both dissipate the same power P = I²R and glow with equal brightness.",
+      "misconceptionTested": "misc-series-current-attenuation"
+    },
+    {
+      "id": "diag-09",
+      "conceptId": "c7",
+      "conceptName": "Parallel Circuits",
+      "title": "Equivalent Resistance in Parallel",
+      "questionText": "Two resistors of 6 Ω and 6 Ω are connected in parallel. What is their equivalent resistance?",
+      "type": "numerical",
+      "difficulty": "medium",
+      "correctAnswer": "3",
+      "tolerance": 0.05,
+      "unit": "Ohms (Ω)",
+      "expectedReasoning": "In parallel: 1/R_total = 1/R1 + 1/R2 = 1/6 + 1/6 = 2/6 = 1/3. Therefore R_total = 3 Ω.",
+      "hint": "Use the parallel reciprocal formula: 1/Req = 1/R1 + 1/R2."
+    },
+    {
+      "id": "diag-10",
+      "conceptId": "c7",
+      "conceptName": "Parallel Circuits",
+      "title": "Adding More Branches in Parallel",
+      "questionText": "A room has two identical bulbs connected in parallel to the mains. If a third identical bulb is switched on in parallel with them, what happens to the total resistance of the circuit?",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "options": [
+        {
+          "id": "a",
+          "text": "Total resistance increases because more electrical devices are active"
+        },
+        {
+          "id": "b",
+          "text": "Total resistance decreases because an extra conductive path is added"
+        },
+        {
+          "id": "c",
+          "text": "Total resistance remains unchanged"
+        },
+        {
+          "id": "d",
+          "text": "Total resistance drops immediately to zero"
+        }
+      ],
+      "correctAnswer": "b",
+      "expectedReasoning": "Connecting an additional branch in parallel provides an additional path for electric charge to flow, increasing total conductance and lowering the overall equivalent resistance of the circuit (1/Req = 1/R1 + 1/R2 + 1/R3).",
+      "misconceptionTested": "misc-parallel-resistance-increase"
+    },
+    {
+      "id": "diag-11",
+      "conceptId": "c8",
+      "conceptName": "Electric Power & Joule's Heating",
+      "title": "Calculating Electrical Power",
+      "questionText": "An electric device is connected to a 12 V source and draws a current of 2 A. What is the power consumed by this device?",
+      "type": "numerical",
+      "difficulty": "easy",
+      "correctAnswer": "24",
+      "tolerance": 0.1,
+      "unit": "Watts (W)",
+      "expectedReasoning": "Power P = V × I = 12 V × 2 A = 24 Watts.",
+      "hint": "Use P = V × I."
+    },
+    {
+      "id": "diag-12",
+      "conceptId": "c8",
+      "conceptName": "Electric Power & Joule's Heating",
+      "title": "Bulb Rating & Resistance Dilemma",
+      "questionText": "Two bulbs marked \"220 V, 100 W\" and \"220 V, 40 W\" are compared. Which bulb has a higher electrical resistance in its filament?",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "options": [
+        {
+          "id": "a",
+          "text": "The 100 W bulb, because higher wattage requires higher resistance"
+        },
+        {
+          "id": "b",
+          "text": "The 40 W bulb, because at constant voltage P = V² / R, so lower power corresponds to higher resistance"
+        },
+        {
+          "id": "c",
+          "text": "Both have identical resistance because they share the 220 V rating"
+        },
+        {
+          "id": "d",
+          "text": "Resistance cannot be determined without measuring current"
+        }
+      ],
+      "correctAnswer": "b",
+      "expectedReasoning": "For appliances designed for the same voltage source (220 V), P = V² / R => R = V² / P. Resistance is inversely proportional to rated power. Therefore, the 40 W bulb has R = (220)² / 40 = 1210 Ω, while the 100 W bulb has R = (220)² / 100 = 484 Ω. The 40 W bulb has higher resistance.",
+      "misconceptionTested": "misc-power-resistance-dilemma"
+    },
+    {
+      "id": "adp-01",
+      "conceptId": "c6",
+      "conceptName": "Series Circuits",
+      "title": "Three Resistors in Series",
+      "questionText": "Three resistors of 1 Ω, 2 Ω, and 3 Ω are combined in series. If this combination is connected to a 12 V battery with negligible internal resistance, what is the current in the circuit?",
+      "type": "numerical",
+      "difficulty": "medium",
+      "correctAnswer": "2",
+      "tolerance": 0.05,
+      "unit": "Amperes (A)",
+      "expectedReasoning": "R_total = 1 + 2 + 3 = 6 Ω. Total current I = V / R_total = 12 V / 6 Ω = 2 A.",
+      "hint": "First find the total equivalent resistance, then apply Ohm’s law."
+    },
+    {
+      "id": "adp-02",
+      "conceptId": "c7",
+      "conceptName": "Parallel Circuits",
+      "title": "Parallel Branch Current Ratio",
+      "questionText": "Two resistors of 10 Ω and 20 Ω are connected in parallel across a 20 V power supply. What is the current flowing specifically through the 10 Ω resistor?",
+      "type": "numerical",
+      "difficulty": "medium",
+      "correctAnswer": "2",
+      "tolerance": 0.05,
+      "unit": "Amperes (A)",
+      "expectedReasoning": "In parallel, each branch receives the full source voltage (20 V). Current through the 10 Ω branch is I1 = V / R1 = 20 V / 10 Ω = 2 A.",
+      "hint": "Each branch in parallel experiences the full source voltage."
+    },
+    {
+      "id": "adp-03",
+      "conceptId": "c6",
+      "conceptName": "Series Circuits",
+      "title": "Voltage Drop in Series",
+      "questionText": "A 4 Ω resistor and an 8 Ω resistor are connected in series across a 24 V battery. What is the potential difference across the 8 Ω resistor?",
+      "type": "numerical",
+      "difficulty": "medium",
+      "correctAnswer": "16",
+      "tolerance": 0.1,
+      "unit": "Volts (V)",
+      "expectedReasoning": "Total R = 4 + 8 = 12 Ω. Current I = 24 / 12 = 2 A. Voltage across 8 Ω resistor V2 = I × R2 = 2 A × 8 Ω = 16 V.",
+      "hint": "Find the circuit current first, then calculate V = I × R for that specific resistor."
+    },
+    {
+      "id": "adp-04",
+      "conceptId": "c8",
+      "conceptName": "Electric Power & Joule's Heating",
+      "title": "Heat Produced in a Resistor",
+      "questionText": "A current of 2 A passes through a 5 Ω heating coil for 10 seconds. How much heat energy (in Joules) is generated?",
+      "type": "numerical",
+      "difficulty": "medium",
+      "correctAnswer": "200",
+      "tolerance": 1,
+      "unit": "Joules (J)",
+      "expectedReasoning": "By Joule's law of heating, H = I² × R × t = (2 A)² × 5 Ω × 10 s = 4 × 5 × 10 = 200 Joules.",
+      "hint": "Recall Joule’s heating formula: H = I²Rt."
+    },
+    {
+      "id": "adp-05",
+      "conceptId": "c2",
+      "conceptName": "Electric Current",
+      "title": "Charges Flowing in Microamperes",
+      "questionText": "If 100 Coulombs of charge flow through an electronic component in 50 seconds, what is the magnitude of electric current in Amperes?",
+      "type": "numerical",
+      "difficulty": "easy",
+      "correctAnswer": "2",
+      "tolerance": 0.05,
+      "unit": "Amperes (A)",
+      "expectedReasoning": "I = Q / t = 100 C / 50 s = 2 A."
+    },
+    {
+      "id": "adp-06",
+      "conceptId": "c7",
+      "conceptName": "Parallel Circuits",
+      "title": "Three Identical Resistors in Parallel",
+      "questionText": "Three identical resistors of 9 Ω each are connected in parallel. What is their combined equivalent resistance?",
+      "type": "numerical",
+      "difficulty": "easy",
+      "correctAnswer": "3",
+      "tolerance": 0.05,
+      "unit": "Ohms (Ω)",
+      "expectedReasoning": "For n identical resistors in parallel, Req = R / n = 9 Ω / 3 = 3 Ω."
+    }
+  ],
+  "learnerModels": {},
+  "misconceptions": [],
+  "attempts": [],
+  "diagnosticAttempts": [],
+  "circuitExperiments": [],
+  "recoveryActivities": [],
+  "revisionSchedules": []
+}
