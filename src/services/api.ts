@@ -10,6 +10,7 @@ import {
   RecoveryActivity,
   RevisionItem,
   TeacherAnalytics,
+  TeacherMessage,
 } from '../types';
 
 const API_BASE = '/api';
@@ -293,4 +294,65 @@ export const api = {
     const res = await fetch(`${API_BASE}/teachers/interventions`);
     return res.json();
   },
+
+  // Messaging between Teacher and Student
+  async sendMessage(data: {
+    teacherId: string;
+    teacherName: string;
+    studentId: string;
+    studentName: string;
+    subject: string;
+    message: string;
+    testScoreInfo?: string;
+  }): Promise<{ message: TeacherMessage }> {
+    const res = await fetch(`${API_BASE}/messages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
+
+  async getStudentMessages(studentId: string): Promise<{ messages: TeacherMessage[] }> {
+    const res = await fetch(`${API_BASE}/messages/student/${studentId}`);
+    return res.json();
+  },
+
+  async getTeacherMessages(teacherId: string): Promise<{ messages: TeacherMessage[] }> {
+    const res = await fetch(`${API_BASE}/messages/teacher/${teacherId}`);
+    return res.json();
+  },
+
+  async markMessageRead(messageId: string): Promise<{ message: TeacherMessage }> {
+    const res = await fetch(`${API_BASE}/messages/${messageId}/read`, {
+      method: 'POST',
+    });
+    return res.json();
+  },
+
+  // DAA Model Exam Runner & Practice
+  async runDaaProgram(programId: number, input: string, customCode?: string): Promise<{
+    output: string;
+    error: string | null;
+    executionTimeMs: number;
+  }> {
+    const res = await fetch(`${API_BASE}/daa/run`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ programId, input, customCode }),
+    });
+    return res.json();
+  },
+
+  async submitDaaPractice(studentId: string, programId: number, programTitle: string, passed: boolean): Promise<{
+    success: boolean;
+  }> {
+    const res = await fetch(`${API_BASE}/daa/submit-practice`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ studentId, programId, programTitle, passed }),
+    });
+    return res.json();
+  },
 };
+

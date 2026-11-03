@@ -233,3 +233,16 @@ export interface TeacherAnalytics {
     affectedConcepts: string[];
   }[];
 }
+
+export interface TeacherMessage {
+  id: string;
+  teacherId: string;
+  teacherName: string;
+  studentId: string;
+  studentName: string;
+  subject: string;
+  message: string;
+  testScoreInfo?: string;
+  createdAt: string;
+  read: boolean;
+}

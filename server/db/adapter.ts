@@ -9,6 +9,7 @@ import {
   MisconceptionRecord,
   RecoveryActivity,
   RevisionItem,
+  TeacherMessage,
 } from '../types.js';
 import {
   CONCEPTS,
@@ -62,10 +63,21 @@ interface DatabaseSchema {
   circuitExperiments: CircuitExperimentRecord[];
   recoveryActivities: RecoveryActivity[];
   revisionSchedules: RevisionItem[];
+  messages: TeacherMessage[];
 }
 
 const DATA_DIR = path.resolve(process.cwd(), '.data');
 const STORE_PATH = path.join(DATA_DIR, 'db_store.json');
+
+const StateSchema = new mongoose.Schema(
+  {
+    key: { type: String, unique: true },
+    data: mongoose.Schema.Types.Mixed,
+  },
+  { timestamps: true }
+);
+
+const StateModel = mongoose.models.LearnIQStore || mongoose.model('LearnIQStore', StateSchema);
 
 class DatabaseAdapter {
   private isMongoConnected: boolean = false;
@@ -116,7 +128,12 @@ class DatabaseAdapter {
       circuitExperiments: [],
       recoveryActivities: [],
       revisionSchedules: [],
+      messages: [],
     };
+
+    if (!this.memoryData.messages) {
+      this.memoryData.messages = [];
+    }
 
     this.persist();
   }
@@ -133,8 +150,12 @@ class DatabaseAdapter {
       circuitExperiments: [],
       recoveryActivities: [],
       revisionSchedules: [],
+      messages: [],
     };
     this.persist();
+    if (this.isMongoConnected) {
+      StateModel.deleteOne({ key: 'main' }).catch(() => {});
+    }
     console.log('[LearnIQ Database] All user data, attempts, and experiments wiped clean.');
   }
 
@@ -147,19 +168,88 @@ class DatabaseAdapter {
     } catch (e) {
       console.warn('[LearnIQ Database] Notice: Disk write skipped or in read-only environment:', e);
     }
+
+    if (this.isMongoConnected) {
+      StateModel.updateOne({ key: 'main' }, { data: this.memoryData }, { upsert: true }).catch((err: any) => {
+        console.warn('[LearnIQ Database] MongoDB async sync error:', err.message);
+      });
+    }
+  }
+
+  private resolveMongoUri(): string | null {
+    let raw = (process.env.MONGODB_URI || '').trim();
+
+    // 1. If empty or quotes, fall back to known configured credentials if present
+    if (!raw || raw === '""' || raw === "''") {
+      return 'mongodb://user_4584fam7b:p4584fam7b@db01.dbhost.dev:5050/db_4584fam7b?authSource=db_4584fam7b';
+    }
+
+    // 2. If it is already a valid MongoDB URI
+    if (raw.startsWith('mongodb://') || raw.startsWith('mongodb+srv://')) {
+      return raw;
+    }
+
+    // 3. If raw is in key-value text format: "Host: ... Port: ... Database: ... Username: ... Password: ..."
+    const hostMatch = raw.match(/Host:\s*([^\s,;]+)/i);
+    const portMatch = raw.match(/Port:\s*(\d+)/i);
+    const dbMatch = raw.match(/Database:\s*([^\s,;]+)/i);
+    const userMatch = raw.match(/Username:\s*([^\s,;]+)/i);
+    const passMatch = raw.match(/Password:\s*([^\s,;]+)/i);
+
+    if (hostMatch && userMatch && passMatch) {
+      const host = hostMatch[1];
+      const port = portMatch ? portMatch[1] : '27017';
+      const database = dbMatch ? dbMatch[1] : 'admin';
+      const user = encodeURIComponent(userMatch[1]);
+      const pass = encodeURIComponent(passMatch[1]);
+      return `mongodb://${user}:${pass}@${host}:${port}/${database}?authSource=${database}`;
+    }
+
+    // 4. If raw is "user:pass@host:port/db" without mongodb:// scheme
+    if (raw.includes('@') && (raw.includes(':') || raw.includes('/'))) {
+      return `mongodb://${raw}`;
+    }
+
+    // 5. If nothing matched, but user:pass env vars exist or fallback credentials can be used
+    if (raw.includes('db01.dbhost.dev') || raw.includes('db_4584fam7b')) {
+      return 'mongodb://user_4584fam7b:p4584fam7b@db01.dbhost.dev:5050/db_4584fam7b?authSource=db_4584fam7b';
+    }
+
+    return null;
   }
 
   public async connect(): Promise<void> {
-    const mongoUri = process.env.MONGODB_URI;
-    if (mongoUri) {
+    const mongoUri = this.resolveMongoUri();
+    const isValidScheme = Boolean(
+      mongoUri && (mongoUri.startsWith('mongodb://') || mongoUri.startsWith('mongodb+srv://'))
+    );
+
+    if (isValidScheme && mongoUri) {
       try {
-        await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 5000 });
+        await mongoose.connect(mongoUri, {
+          serverSelectionTimeoutMS: 5000,
+          connectTimeoutMS: 5000,
+        });
         this.isMongoConnected = true;
-        console.log('[LearnIQ Database] Successfully connected to MongoDB Atlas cluster.');
-      } catch (err) {
-        console.warn(
-          '[LearnIQ Database] MongoDB connection failed or invalid URI. Gracefully falling back to persistent Development Storage Adapter.',
-          err
+        console.log('[LearnIQ Database] Successfully connected to MongoDB database (db_4584fam7b).');
+
+        const existingDoc = await StateModel.findOne({ key: 'main' });
+        if (existingDoc && existingDoc.data) {
+          this.memoryData = existingDoc.data as DatabaseSchema;
+          this.memoryData.concepts = [...CONCEPTS];
+          this.memoryData.questions = [...DIAGNOSTIC_QUESTIONS, ...ADAPTIVE_QUESTIONS_POOL];
+          if (!this.memoryData.messages) this.memoryData.messages = [];
+          console.log(
+            `[LearnIQ Database] Loaded ${this.memoryData.users.length} users and ${this.memoryData.messages.length} messages from MongoDB.`
+          );
+        } else {
+          await StateModel.create({ key: 'main', data: this.memoryData });
+          console.log('[LearnIQ Database] Seeded initial data into MongoDB.');
+        }
+      } catch (err: any) {
+        console.info(
+          '[LearnIQ Database] MongoDB connection inactive. Operating in persistent local storage mode:',
+          err?.message || err
         );
         this.isMongoConnected = false;
       }
@@ -167,6 +257,7 @@ class DatabaseAdapter {
       console.log(
         '[LearnIQ Database] Operating in Development Storage Adapter (Set MONGODB_URI in environment to connect MongoDB Atlas). Persistent disk state enabled.'
       );
+      this.isMongoConnected = false;
     }
   }
 
@@ -569,6 +660,45 @@ class DatabaseAdapter {
     return item;
   }
 
+  // Messages between Teacher and Student
+  public sendMessage(msg: Omit<TeacherMessage, 'id' | 'createdAt' | 'read'>): TeacherMessage {
+    if (!this.memoryData.messages) {
+      this.memoryData.messages = [];
+    }
+    const newMsg: TeacherMessage = {
+      ...msg,
+      id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+      createdAt: new Date().toISOString(),
+      read: false,
+    };
+    this.memoryData.messages.push(newMsg);
+    this.persist();
+    return newMsg;
+  }
+
+  public getMessagesForStudent(studentId: string): TeacherMessage[] {
+    if (!this.memoryData.messages) return [];
+    return this.memoryData.messages
+      .filter((m) => m.studentId === studentId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  public getMessagesByTeacher(teacherId: string): TeacherMessage[] {
+    if (!this.memoryData.messages) return [];
+    return this.memoryData.messages
+      .filter((m) => m.teacherId === teacherId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  public markMessageRead(messageId: string): TeacherMessage | null {
+    if (!this.memoryData.messages) return null;
+    const msg = this.memoryData.messages.find((m) => m.id === messageId);
+    if (!msg) return null;
+    msg.read = true;
+    this.persist();
+    return msg;
+  }
+
   // Real Dynamic Teacher Analytics: strictly based on actual registered students and real attempts
   public getTeacherAnalytics(): any {
     const students = this.memoryData.users.filter((u) => u.role === 'student');
@@ -606,6 +736,8 @@ class DatabaseAdapter {
     const classStudents = students.map((s) => {
       const model = this.memoryData.learnerModels[s.id];
       const mastery = model ? model.overallMastery : 0;
+      const testAttended = model ? (model.diagnosticCompleted || model.overallMastery > 0) : false;
+      const diagnosticScore = model?.diagnosticScore ?? (testAttended ? mastery : undefined);
 
       // Find student's weakest concept
       let weakestConcept = 'Not assessed';
@@ -626,6 +758,8 @@ class DatabaseAdapter {
         name: s.name,
         email: s.email,
         mastery,
+        testAttended,
+        diagnosticScore,
         weakestConcept,
         activeMisconception: activeMisc ? activeMisc.misconceptionTitle : 'None recorded',
         streak: model?.streakDays ?? 1,

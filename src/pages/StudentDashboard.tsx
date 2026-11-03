@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
-import { Concept, RevisionItem, MisconceptionRecord } from '../types';
+import { Concept, RevisionItem, MisconceptionRecord, TeacherMessage } from '../types';
 import {
   Zap,
   FlaskConical,
@@ -18,6 +18,9 @@ import {
   Clock,
   ChevronRight,
   ShieldAlert,
+  Mail,
+  MessageSquare,
+  Code2,
 } from 'lucide-react';
 
 export const StudentDashboard: React.FC = () => {
@@ -28,6 +31,7 @@ export const StudentDashboard: React.FC = () => {
   const [misconceptions, setMisconceptions] = useState<MisconceptionRecord[]>([]);
   const [nextActivity, setNextActivity] = useState<any>(null);
   const [experiments, setExperiments] = useState<any[]>([]);
+  const [messages, setMessages] = useState<TeacherMessage[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,12 +43,13 @@ export const StudentDashboard: React.FC = () => {
     if (!user) return;
     setLoading(true);
     try {
-      const [conceptsRes, revRes, miscRes, nextActRes, expRes] = await Promise.all([
+      const [conceptsRes, revRes, miscRes, nextActRes, expRes, messagesRes] = await Promise.all([
         api.getConcepts(),
         api.getRevisions(user.id),
         api.getMisconceptions(user.id),
         api.getNextRecommendedActivity(user.id),
         api.getCircuitExperiments(user.id),
+        api.getStudentMessages(user.id),
       ]);
 
       setConcepts(conceptsRes.concepts);
@@ -52,10 +57,22 @@ export const StudentDashboard: React.FC = () => {
       setMisconceptions(miscRes.misconceptions);
       setNextActivity(nextActRes);
       setExperiments(expRes.experiments);
+      setMessages(messagesRes.messages || []);
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleMarkAsRead = async (messageId: string) => {
+    try {
+      await api.markMessageRead(messageId);
+      setMessages((prev) =>
+        prev.map((m) => (m.id === messageId ? { ...m, read: true } : m))
+      );
+    } catch (err) {
+      console.error('Failed to mark message as read:', err);
     }
   };
 
@@ -136,6 +153,38 @@ export const StudentDashboard: React.FC = () => {
           </div>
         </div>
 
+        {/* DAA Model Exam Priority Card */}
+        <div className="bg-gradient-to-r from-cyan-950/60 via-slate-900 to-indigo-950/60 border border-cyan-800/60 p-5 rounded-2xl shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-11 h-11 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center border border-cyan-500/30 flex-shrink-0 mt-0.5">
+              <Code2 className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/40">
+                  DAA Model Exam Preparation
+                </span>
+                <span className="text-[10px] font-medium text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/30">
+                  7 Questions • Shortest Python Code
+                </span>
+              </div>
+              <h3 className="text-base font-bold text-white mt-1">
+                DAA Model Exam 7 High-Yield Programs & Live Runner
+              </h3>
+              <p className="text-xs text-slate-300 mt-0.5 max-w-2xl">
+                Skip entire Module 3 & 4 theory. Review Huffman, Matrix Chain, LCS, Knapsack, N-Queens, Graph Coloring, and TSP with dynamic inputs and live execution.
+              </p>
+            </div>
+          </div>
+          <Link
+            to="/daa-prep"
+            className="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold flex items-center gap-2 transition-colors shrink-0 shadow-md shadow-cyan-950"
+          >
+            <span>Open DAA Hub</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
         {/* Recommended Next Action Banner */}
         {nextActivity && (
           <div className="bg-gradient-to-r from-cyan-950/40 via-blue-950/30 to-slate-900 border border-cyan-800/50 p-5 rounded-2xl shadow-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -210,6 +259,129 @@ export const StudentDashboard: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Teacher Guidance & Assessment Feedback Box */}
+        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-600 to-blue-500 flex items-center justify-center text-white shadow-md">
+                <Mail className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-bold text-white">Teacher Guidance & Assessment Feedback</h3>
+                  {messages.filter((m) => !m.read).length > 0 && (
+                    <span className="px-2 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800 text-[10px] font-bold animate-pulse">
+                      {messages.filter((m) => !m.read).length} New
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-slate-400">
+                  Direct communication, test reviews, and study suggestions from your teacher
+                </p>
+              </div>
+            </div>
+
+            <div className="text-xs text-slate-400">
+              <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 font-semibold">
+                {messages.length} Message{messages.length === 1 ? '' : 's'} Total
+              </span>
+            </div>
+          </div>
+
+          {messages.length === 0 ? (
+            <div className="p-6 bg-slate-950/60 border border-slate-800/80 rounded-2xl text-center text-xs text-slate-400">
+              <MessageSquare className="w-6 h-6 text-slate-600 mx-auto mb-2" />
+              <p className="font-semibold text-slate-300">No teacher messages yet</p>
+              <p className="text-[11px] text-slate-500 mt-1 max-w-md mx-auto">
+                When your instructor reviews your Electricity Diagnostic assessment or Virtual Lab experiments, their personalized recommendations and test feedback will appear here.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {messages.map((m) => (
+                <div
+                  key={m.id}
+                  className={`p-4 rounded-2xl border transition ${
+                    !m.read
+                      ? 'bg-slate-950/90 border-cyan-500/50 shadow-md shadow-cyan-500/10'
+                      : 'bg-slate-950/60 border-slate-800/80'
+                  }`}
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-2">
+                    <div className="space-y-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-sm font-bold text-white">{m.subject}</span>
+                        {!m.read && (
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold bg-cyan-500 text-slate-950">
+                            NEW
+                          </span>
+                        )}
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-950/60 text-amber-300 border border-amber-800/60 text-[10px] font-semibold">
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                          From Teacher: {m.teacherName}
+                        </span>
+                        {m.testScoreInfo && (
+                          <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                            {m.testScoreInfo}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[11px] text-slate-500 block">
+                        Received on {new Date(m.createdAt).toLocaleDateString()} at{' '}
+                        {new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+
+                    <div className="flex-shrink-0">
+                      {!m.read ? (
+                        <button
+                          onClick={() => handleMarkAsRead(m.id)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition cursor-pointer shadow-sm"
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Mark as Read</span>
+                        </button>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400 font-medium">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          <span>Read</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-800/80 text-xs text-slate-300 leading-relaxed whitespace-pre-line">
+                    {m.message}
+                  </div>
+
+                  {/* Contextual Action Shortcut */}
+                  <div className="mt-2.5 flex items-center justify-between text-xs">
+                    <span className="text-[11px] text-slate-500">
+                      Electricity Class 10 • Feedback
+                    </span>
+                    <div className="flex gap-2">
+                      <Link
+                        to="/lab"
+                        className="text-cyan-400 hover:underline inline-flex items-center gap-1 text-xs"
+                      >
+                        <FlaskConical className="w-3 h-3" />
+                        <span>Launch Lab</span>
+                      </Link>
+                      <Link
+                        to="/practice"
+                        className="text-slate-400 hover:text-white inline-flex items-center gap-1 text-xs"
+                      >
+                        <Sparkles className="w-3 h-3" />
+                        <span>Practice</span>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* 8 Concept Mastery Cards Grid */}
         <div>

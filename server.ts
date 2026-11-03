@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { spawn } from 'child_process';
 import dotenv from 'dotenv';
 import { createServer as createViteServer } from 'vite';
 
@@ -566,6 +567,135 @@ app.get('/api/teachers/misconceptions', (_req, res) => {
 app.get('/api/teachers/interventions', (_req, res) => {
   const analytics = db.getTeacherAnalytics();
   res.json({ recommendations: analytics.teacherRecommendations });
+});
+
+// ---------------------------------------------------------------------
+// 10. Teacher-to-Student Messaging & Intervention Feedback
+// ---------------------------------------------------------------------
+app.post('/api/messages', (req, res) => {
+  const { teacherId, teacherName, studentId, studentName, subject, message, testScoreInfo } = req.body;
+  if (!teacherId || !studentId || !message) {
+    return res.status(400).json({ error: 'teacherId, studentId, and message are required' });
+  }
+
+  const newMsg = db.sendMessage({
+    teacherId,
+    teacherName: teacherName || 'Teacher',
+    studentId,
+    studentName: studentName || 'Student',
+    subject: subject || 'Test Feedback & Conceptual Support',
+    message,
+    testScoreInfo,
+  });
+
+  res.status(201).json({ message: newMsg });
+});
+
+app.get('/api/messages/student/:studentId', (req, res) => {
+  const messages = db.getMessagesForStudent(req.params.studentId);
+  res.json({ messages });
+});
+
+app.get('/api/messages/teacher/:teacherId', (req, res) => {
+  const messages = db.getMessagesByTeacher(req.params.teacherId);
+  res.json({ messages });
+});
+
+app.post('/api/messages/:id/read', (req, res) => {
+  const updated = db.markMessageRead(req.params.id);
+  if (!updated) {
+    return res.status(404).json({ error: 'Message not found' });
+  }
+  res.json({ message: updated });
+});
+
+// ---------------------------------------------------------------------
+// 11. DAA Model Exam Program Execution & Testing
+// ---------------------------------------------------------------------
+const DAA_FILES: Record<number, string> = {
+  1: '01_huffman_coding.py',
+  2: '02_matrix_chain_multiplication.py',
+  3: '03_longest_common_subsequence.py',
+  4: '04_knapsack_memoization.py',
+  5: '05_n_queens.py',
+  6: '06_graph_coloring.py',
+  7: '07_traveling_salesperson.py',
+};
+
+app.post('/api/daa/run', (req, res) => {
+  const { programId, input, customCode } = req.body;
+  const fileName = DAA_FILES[programId];
+
+  if (!fileName && !customCode) {
+    return res.status(400).json({ error: 'Invalid programId or code' });
+  }
+
+  const startTime = Date.now();
+  const args = customCode ? ['-c', customCode] : [path.join(__dirname, 'daa_programs', fileName)];
+  const child = spawn('python3', args);
+
+  let stdout = '';
+  let stderr = '';
+  let finished = false;
+
+  const timer = setTimeout(() => {
+    if (!finished) {
+      finished = true;
+      child.kill('SIGKILL');
+      res.json({
+        output: stdout,
+        error: 'Execution timed out (5s limit)',
+        executionTimeMs: 5000,
+      });
+    }
+  }, 5000);
+
+  if (input !== undefined && input !== null) {
+    child.stdin.write(String(input).endsWith('\n') ? String(input) : String(input) + '\n');
+  }
+  child.stdin.end();
+
+  child.stdout.on('data', (d) => {
+    stdout += d.toString();
+  });
+  child.stderr.on('data', (d) => {
+    stderr += d.toString();
+  });
+
+  child.on('close', (code) => {
+    if (finished) return;
+    finished = true;
+    clearTimeout(timer);
+    res.json({
+      output: stdout,
+      error: code !== 0 ? (stderr || `Exited with code ${code}`) : null,
+      executionTimeMs: Date.now() - startTime,
+    });
+  });
+
+  child.on('error', (err) => {
+    if (finished) return;
+    finished = true;
+    clearTimeout(timer);
+    res.status(500).json({ output: stdout, error: err.message, executionTimeMs: Date.now() - startTime });
+  });
+});
+
+app.post('/api/daa/submit-practice', (req, res) => {
+  const { studentId, programId, programTitle, passed } = req.body;
+  const targetStudentId = studentId || 'jaiakash1826';
+  
+  // Record diagnostic attempt so teacher dashboard sees the attended test!
+  const result = db.recordDiagnostic(targetStudentId, [
+    {
+      questionId: `daa-prog-${programId}`,
+      answer: passed ? 'PASSED_SAMPLE_TESTS' : 'ATTEMPTED',
+      confidence: 'very_confident',
+      explanation: `Student verified dynamic input and executed DAA program: ${programTitle}`,
+    },
+  ]);
+
+  res.json({ success: true, result });
 });
 
 // ---------------------------------------------------------------------

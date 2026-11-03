@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { api } from '../../services/api';
 import {
   Zap,
   Activity,
@@ -17,6 +18,8 @@ import {
   Trash2,
   LogIn,
   UserPlus,
+  Mail,
+  Code2,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -24,9 +27,21 @@ export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   const isStudent = user?.role === 'student';
   const isTeacher = user?.role === 'teacher';
+
+  useEffect(() => {
+    if (user && user.role === 'student') {
+      api.getStudentMessages(user.id)
+        .then((res) => {
+          const unread = (res.messages || []).filter((m) => !m.read).length;
+          setUnreadMessages(unread);
+        })
+        .catch(() => {});
+    }
+  }, [user, location.pathname]);
 
   interface NavItem {
     to: string;
@@ -37,10 +52,11 @@ export const Navbar: React.FC = () => {
   }
 
   const studentLinks: NavItem[] = [
-    { to: '/dashboard', label: 'Dashboard', icon: Activity },
+    { to: '/dashboard', label: 'Dashboard', icon: Activity, badge: unreadMessages > 0 ? unreadMessages : undefined },
+    { to: '/daa-prep', label: 'DAA Model Exam', icon: Code2, highlight: true },
     { to: '/diagnostic', label: 'Diagnostic', icon: BookOpen },
     { to: '/graph', label: 'Concept Graph', icon: GitFork },
-    { to: '/lab', label: 'Virtual Lab', icon: FlaskConical, highlight: true },
+    { to: '/lab', label: 'Virtual Lab', icon: FlaskConical },
     { to: '/practice', label: 'Practice', icon: Sparkles },
     { to: '/misconceptions', label: 'Misconceptions', icon: AlertTriangle, badge: learnerModel?.activeMisconceptionsCount },
     { to: '/recovery', label: 'Recovery Mode', icon: RotateCcw },
@@ -49,7 +65,8 @@ export const Navbar: React.FC = () => {
 
   const teacherLinks: NavItem[] = [
     { to: '/teacher', label: 'Teacher Dashboard', icon: Activity },
-    { to: '/teacher/heatmap', label: 'Misconception Heatmap', icon: AlertTriangle, highlight: true },
+    { to: '/daa-prep', label: 'DAA Model Exam', icon: Code2, highlight: true },
+    { to: '/teacher/heatmap', label: 'Misconception Heatmap', icon: AlertTriangle },
     { to: '/teacher/interventions', label: 'AI Interventions', icon: Sparkles },
     { to: '/teacher/students', label: 'Student Cohort', icon: Users },
   ];
@@ -86,6 +103,17 @@ export const Navbar: React.FC = () => {
 
         {/* User Account Controls */}
         <div className="flex items-center gap-2">
+          {isStudent && unreadMessages > 0 && (
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-950 hover:bg-cyan-900 text-cyan-300 border border-cyan-700/80 text-[11px] font-bold animate-pulse transition shadow-sm cursor-pointer"
+              title="You have unread feedback from your teacher"
+            >
+              <Mail className="w-3.5 h-3.5 text-cyan-400" />
+              <span>{unreadMessages} Teacher Message{unreadMessages > 1 ? 's' : ''}</span>
+            </Link>
+          )}
+
           {user ? (
             <div className="relative">
               <button
