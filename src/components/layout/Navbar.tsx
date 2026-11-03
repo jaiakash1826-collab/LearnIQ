@@ -19,7 +19,6 @@ import {
   LogIn,
   UserPlus,
   Mail,
-  Code2,
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -53,7 +52,6 @@ export const Navbar: React.FC = () => {
 
   const studentLinks: NavItem[] = [
     { to: '/dashboard', label: 'Dashboard', icon: Activity, badge: unreadMessages > 0 ? unreadMessages : undefined },
-    { to: '/daa-prep', label: 'DAA Model Exam', icon: Code2, highlight: true },
     { to: '/diagnostic', label: 'Diagnostic', icon: BookOpen },
     { to: '/graph', label: 'Concept Graph', icon: GitFork },
     { to: '/lab', label: 'Virtual Lab', icon: FlaskConical },
@@ -65,7 +63,6 @@ export const Navbar: React.FC = () => {
 
   const teacherLinks: NavItem[] = [
     { to: '/teacher', label: 'Teacher Dashboard', icon: Activity },
-    { to: '/daa-prep', label: 'DAA Model Exam', icon: Code2, highlight: true },
     { to: '/teacher/heatmap', label: 'Misconception Heatmap', icon: AlertTriangle },
     { to: '/teacher/interventions', label: 'AI Interventions', icon: Sparkles },
     { to: '/teacher/students', label: 'Student Cohort', icon: Users },
