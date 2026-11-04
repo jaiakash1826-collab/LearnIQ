@@ -329,30 +329,5 @@ export const api = {
     });
     return res.json();
   },
-
-  // DAA Model Exam Runner & Practice
-  async runDaaProgram(programId: number, input: string, customCode?: string): Promise<{
-    output: string;
-    error: string | null;
-    executionTimeMs: number;
-  }> {
-    const res = await fetch(`${API_BASE}/daa/run`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ programId, input, customCode }),
-    });
-    return res.json();
-  },
-
-  async submitDaaPractice(studentId: string, programId: number, programTitle: string, passed: boolean): Promise<{
-    success: boolean;
-  }> {
-    const res = await fetch(`${API_BASE}/daa/submit-practice`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ studentId, programId, programTitle, passed }),
-    });
-    return res.json();
-  },
 };
 

@@ -20,7 +20,6 @@ import {
   ShieldAlert,
   Mail,
   MessageSquare,
-  Code2,
 } from 'lucide-react';
 
 export const StudentDashboard: React.FC = () => {
@@ -151,38 +150,6 @@ export const StudentDashboard: React.FC = () => {
               {learnerModel?.overallMastery ?? 50}%
             </div>
           </div>
-        </div>
-
-        {/* DAA Model Exam Priority Card */}
-        <div className="bg-gradient-to-r from-cyan-950/60 via-slate-900 to-indigo-950/60 border border-cyan-800/60 p-5 rounded-2xl shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-3.5">
-            <div className="w-11 h-11 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center border border-cyan-500/30 flex-shrink-0 mt-0.5">
-              <Code2 className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/80 px-2 py-0.5 rounded border border-cyan-800/40">
-                  DAA Model Exam Preparation
-                </span>
-                <span className="text-[10px] font-medium text-amber-300 bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/30">
-                  7 Questions • Shortest Python Code
-                </span>
-              </div>
-              <h3 className="text-base font-bold text-white mt-1">
-                DAA Model Exam 7 High-Yield Programs & Live Runner
-              </h3>
-              <p className="text-xs text-slate-300 mt-0.5 max-w-2xl">
-                Skip entire Module 3 & 4 theory. Review Huffman, Matrix Chain, LCS, Knapsack, N-Queens, Graph Coloring, and TSP with dynamic inputs and live execution.
-              </p>
-            </div>
-          </div>
-          <Link
-            to="/daa-prep"
-            className="px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold flex items-center gap-2 transition-colors shrink-0 shadow-md shadow-cyan-950"
-          >
-            <span>Open DAA Hub</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
         </div>
 
         {/* Recommended Next Action Banner */}

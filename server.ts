@@ -24,8 +24,10 @@ const PORT = Number(process.env.PORT) || 3000;
 
 app.use(express.json());
 
-// Initialize Database
-await db.connect();
+// Initialize Database asynchronously so the HTTP server listens immediately
+db.connect().catch((err) => {
+  console.warn('[LearnIQ Database] Async DB connection notice:', err?.message || err);
+});
 
 // ---------------------------------------------------------------------
 // 1. Authentication Endpoints
@@ -296,7 +298,6 @@ app.get('/api/questions/next', async (req, res) => {
   const concept = db.getConceptById(targetConceptId) || CONCEPTS[0];
   const cm = model?.conceptMastery[targetConceptId];
   const difficulty: 'easy' | 'medium' | 'hard' =
-    (cm?.masteryScore ?? 0) > 75 ? 'hard' : (cm?.masteryScore ?? 0) > 45 ? 'medium' : 'easy';
     (cm?.masteryScore ?? 0) > 75 ? 'hard' : (cm?.masteryScore ?? 0) > 45 ? 'medium' : 'easy';
 
   // Check if there is an unattempted question in pool

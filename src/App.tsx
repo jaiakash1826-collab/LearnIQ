@@ -15,7 +15,6 @@ import { LearningRecoveryPage } from './pages/LearningRecoveryPage';
 import { RevisionPlannerPage } from './pages/RevisionPlannerPage';
 import { TeacherDashboard } from './pages/TeacherDashboard';
 import { AuthPage } from './pages/AuthPage';
-import { DaaModelExamPage } from './pages/DaaModelExamPage';
 
 const AppRoutes: React.FC = () => {
   const { user, isLoading } = useAuth();
@@ -50,8 +49,8 @@ const AppRoutes: React.FC = () => {
           <Route path="/misconceptions" element={<MisconceptionsPage />} />
           <Route path="/recovery" element={<LearningRecoveryPage />} />
           <Route path="/revisions" element={<RevisionPlannerPage />} />
-          <Route path="/daa-prep" element={<DaaModelExamPage />} />
-          <Route path="/daa" element={<DaaModelExamPage />} />
+          <Route path="/daa-prep" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/daa" element={<Navigate to="/dashboard" replace />} />
 
           {/* Teacher Routes */}
           <Route path="/teacher" element={<TeacherDashboard />} />
